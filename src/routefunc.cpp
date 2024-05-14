@@ -537,6 +537,24 @@ void xy_yx_mesh( const Router *r, const Flit *f,
 
 //=============================================================
 
+bool isFaultWithPort(int curr, int port){
+  if((curr == 2 && port == 2) || (curr == 2 && port == 3) || (curr == 4 && port == 2) || (curr == 4 && port == 3))
+    return true;
+  if((curr == 1 && port == 2) || (curr == 1 && port == 3) || (curr == 5 && port == 3) || (curr == 5 && port == 1))
+    return true;
+  return false;
+}
+
+//made changes here :  FJDHDUC
+
+bool isFault(int curr, int port){
+  if((curr == 0 && port == 0) || (curr == 3 && port == 0) || (curr == 4 && port == 0))
+    return true;
+  if((curr == 1 && port == 1) || (curr == 5 && port == 1) || (curr == 7 && port == 3))
+    return true;
+  return false;
+}
+
 int dor_next_mesh( int cur, int dest, bool descending )
 {
   if ( cur == dest ) {
@@ -561,9 +579,20 @@ int dor_next_mesh( int cur, int dest, bool descending )
     dest %= gK;
   }
 
+  //made changes here :  QBSCNXD
+
   if ( cur < dest ) {
+    if(isFault(cur, 2*dim_left) && 2*dim_left == 0){
+      return 2;
+    }
+    else if(isFault(cur, 2*dim_left) && 2*dim_left == 2){
+      return 0;
+    }
     return 2*dim_left;     // Right
   } else {
+    if(isFault(cur, 2*dim_left + 1) ){
+      return 2*dim_left;
+    }
     return 2*dim_left + 1; // Left
   }
 }
